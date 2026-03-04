@@ -1,6 +1,9 @@
 async function handleSearch() {
     const query = document.getElementById('productInput').value;
-    const key = 'AIzaSyAYqCxsfcf894zRIhQkYmyAYLvADAeHlD4'; 
+    
+    // IMPORTANTE: Para probarlo localmente, pon tu llave nueva aquí.
+    // Pero antes de subirlo a Vercel, te enseñaré a ocultarla.
+    const key = 'TU_NUEVA_LLAVE_AQUI'; 
     
     if (!query) return;
 
@@ -10,19 +13,17 @@ async function handleSearch() {
 
     btn.disabled = true;
     loading.classList.remove('hidden');
-    results.classList.add('opacity-0', 'translate-y-10');
 
     try {
-        const url = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key=' + key;
+        // Usamos la versión estable v1 y el modelo Gemini 3 Flash
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-lite:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ 
-                        text: 'Actúa como experto en compras. Analiza el producto "' + query + '". Dame una respuesta breve en español dividida en tres partes claras: 1) Precio y tienda, 2) Calidad, 3) Confianza. Separa cada sección con el símbolo "|".' 
-                    }]
+                    parts: [{ text: `Analiza el producto "${query}" brevemente. Dame precio, calidad y confianza en español, separado por "|".` }]
                 }]
             })
         });
@@ -30,21 +31,21 @@ async function handleSearch() {
         const data = await response.json();
 
         if (data.error) {
-            alert("Aviso de Google: " + data.error.message);
+            alert("Error: " + data.error.message);
             return;
         }
 
         const textoIA = data.candidates[0].content.parts[0].text;
         const partes = textoIA.split('|');
 
-        document.getElementById('res-price').innerText = partes[0] || textoIA;
-        document.getElementById('res-quality').innerText = partes[1] || "Análisis completado.";
-        document.getElementById('res-trust').innerText = partes[2] || "Tienda analizada.";
+        document.getElementById('res-price').innerText = partes[0] || "No disponible";
+        document.getElementById('res-quality').innerText = partes[1] || "No disponible";
+        document.getElementById('res-trust').innerText = partes[2] || "No disponible";
         
-        results.classList.remove('opacity-0', 'translate-y-10');
+        results.classList.remove('opacity-0');
 
     } catch (err) {
-        alert("Error al conectar con la IA.");
+        alert("Error de conexión con la IA.");
     } finally {
         btn.disabled = false;
         loading.classList.add('hidden');
