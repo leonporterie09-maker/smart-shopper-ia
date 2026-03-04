@@ -16,14 +16,15 @@ async function handleSearch() {
     results.classList.add('hidden'); 
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
+        // Probamos con la versión 1.5 Flash 8b, que es la más accesible
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ text: `Analiza "${query}". Dame precio USD, calidad 1-10 y confianza. Formato: Precio | Calidad | Confianza` }]
+                    parts: [{ text: `Producto: "${query}". Dame: Precio USD | Calidad 1-10 | Confianza` }]
                 }]
             })
         });
