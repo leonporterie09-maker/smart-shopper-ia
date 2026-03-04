@@ -16,14 +16,15 @@ async function handleSearch() {
     results.classList.add('hidden'); 
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=${key}`;
+        // Esta es la URL estándar para el modelo gratuito actual
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ text: `Analiza "${query}". Responde: Precio USD | Calidad 1-10 | Confianza` }]
+                    parts: [{ text: `Analiza "${query}". Formato: Precio USD | Calidad 1-10 | Confianza` }]
                 }]
             })
         });
@@ -31,16 +32,16 @@ async function handleSearch() {
         const data = await response.json();
 
         if (data.error) {
-            alert("Error: " + data.error.message);
+            alert("Google aún está activando tu llave: " + data.error.message);
             return;
         }
 
         const textoIA = data.candidates[0].content.parts[0].text;
         const partes = textoIA.split('|');
 
-        document.getElementById('res-price').innerText = partes[0] || "N/A";
-        document.getElementById('res-quality').innerText = partes[1] || "N/A";
-        document.getElementById('res-trust').innerText = partes[2] || "Alta";
+        document.getElementById('res-price').innerText = partes[0]?.trim() || "N/A";
+        document.getElementById('res-quality').innerText = partes[1]?.trim() || "N/A";
+        document.getElementById('res-trust').innerText = partes[2]?.trim() || "Alta";
         
         loading.classList.add('hidden');
         results.classList.remove('hidden');
