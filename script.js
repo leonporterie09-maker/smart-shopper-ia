@@ -19,7 +19,7 @@ async function handleSearch() {
 
     try {
         // Usamos el modelo 1.5 que es más estable para la cuota
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
