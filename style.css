@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+body {
+    background-color: #f0f4f8;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.circle-gradient { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+.circle-gradient-alt { background: linear-gradient(135deg, #a855f7, #c084fc); }
+
+.card-premium {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-premium:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 40px 60px -15px rgba(0, 0, 0, 0.1);
+}
+
+.loader-ring {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #3b82f6;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.scale-up { animation: scaleUp 0.3s ease-out; }
+@keyframes scaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
