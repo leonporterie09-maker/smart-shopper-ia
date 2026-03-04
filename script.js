@@ -16,24 +16,28 @@ async function handleSearch() {
     results.classList.add('hidden'); 
 
     try {
-        // Esta es la URL de producción oficial. Sin "beta" y con el modelo flash estándar.
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
+        // USAMOS V1BETA Y GEMINI-1.5-FLASH (La combinación más compatible)
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ text: `Analiza el producto "${query}". Responde estrictamente en este formato: Precio USD | Calidad 1-10 | Confianza` }]
+                    parts: [{ text: `Producto: "${query}". Dame: Precio USD | Calidad 1-10 | Confianza` }]
                 }]
             })
         });
 
         const data = await response.json();
 
-        // Si hay un error, lo mostramos para saber qué pasa
         if (data.error) {
             alert("Error de Google: " + data.error.message);
+            return;
+        }
+
+        if (!data.candidates || !data.candidates[0]) {
+            alert("La IA no devolvió datos. Intenta con otro producto.");
             return;
         }
 
