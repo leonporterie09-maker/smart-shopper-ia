@@ -2,7 +2,7 @@ async function handleSearch() {
     const query = document.getElementById('productInput').value;
     
     const p1 = 'AIzaSy';
-    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0'; 
+    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0';
     const key = p1 + p2;
 
     if (!query) return;
@@ -16,14 +16,15 @@ async function handleSearch() {
     results.classList.add('hidden'); 
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+        // Probamos con el nombre técnico exacto de la versión estable
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ text: `Analiza "${query}". Responde: Precio USD | Calidad 1-10 | Confianza` }]
+                    parts: [{ text: `Analiza "${query}". Responde solo: Precio USD | Calidad 1-10 | Confianza` }]
                 }]
             })
         });
@@ -31,7 +32,7 @@ async function handleSearch() {
         const data = await response.json();
 
         if (data.error) {
-            alert("Google está procesando tu llave. Prueba en un rato. Error: " + data.error.message);
+            alert("Google sigue diciendo: " + data.error.message);
             return;
         }
 
