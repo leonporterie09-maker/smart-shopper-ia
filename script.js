@@ -3,7 +3,7 @@ async function handleSearch() {
     
     // --- CONFIGURACIÓN DE TU LLAVE ---
     const p1 = 'AIzaSy';
-    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0'; // <--- PEGA AQUÍ EL RESTO DE TU LLAVE (SIN EL AIZASY)
+    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0';
     const key = p1 + p2;
     // ---------------------------------
 
