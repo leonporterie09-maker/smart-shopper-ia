@@ -2,7 +2,7 @@ async function handleSearch() {
     const query = document.getElementById('productInput').value;
     
     const p1 = 'AIzaSy';
-    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0'; 
+    const p2 = 'CyKY108i4PiNBVPbTUjBYIGUXreg2Pwd0';
     const key = p1 + p2;
 
     if (!query) return;
@@ -16,21 +16,22 @@ async function handleSearch() {
     results.classList.add('hidden'); 
 
     try {
-        // Esta URL usa "1.5-flash-latest" que es el nombre universal actual
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+        // Esta es la URL de producción oficial. Sin "beta" y con el modelo flash estándar.
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
         
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
-                    parts: [{ text: `Analiza "${query}". Responde solo: Precio USD | Calidad 1-10 | Confianza` }]
+                    parts: [{ text: `Analiza el producto "${query}". Responde estrictamente en este formato: Precio USD | Calidad 1-10 | Confianza` }]
                 }]
             })
         });
 
         const data = await response.json();
 
+        // Si hay un error, lo mostramos para saber qué pasa
         if (data.error) {
             alert("Error de Google: " + data.error.message);
             return;
@@ -39,15 +40,15 @@ async function handleSearch() {
         const textoIA = data.candidates[0].content.parts[0].text;
         const partes = textoIA.split('|');
 
-        document.getElementById('res-price').innerText = partes[0] || "N/A";
-        document.getElementById('res-quality').innerText = partes[1] || "N/A";
-        document.getElementById('res-trust').innerText = partes[2] || "Alta";
+        document.getElementById('res-price').innerText = partes[0] ? partes[0].trim() : "N/A";
+        document.getElementById('res-quality').innerText = partes[1] ? partes[1].trim() : "N/A";
+        document.getElementById('res-trust').innerText = partes[2] ? partes[2].trim() : "Alta";
         
         loading.classList.add('hidden');
         results.classList.remove('hidden');
 
     } catch (err) {
-        alert("Error de conexión");
+        alert("Error de conexión. Revisa tu internet.");
     } finally {
         btn.disabled = false;
         loading.classList.add('hidden');
